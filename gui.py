@@ -15,6 +15,7 @@ from keras.optimizers import Adam
 from keras.layers import MaxPooling2D
 from keras.preprocessing.image import ImageDataGenerator
 
+
 emotion_model = Sequential()
 
 emotion_model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=(48,48,1)))
@@ -39,14 +40,15 @@ cv2.ocl.setUseOpenCL(False)
 emotion_dict = {0: "   Angry   ", 1: "Disgusted", 2: "  Fearful  ", 3: "   Happy   ", 4: "  Neutral  ", 5: "    Sad    ", 6: "Surprised"}
 
 
-emoji_dist={0:"./emojis/angry.png",2:"./emojis/disgusted.png",2:"./emojis/fearful.png",3:"./emojis/happy.png", 4:"./emojis/neutral.png",5:"./emojis/sad.png",6:"./emojis/surpriced.png"}
+emoji_dist={0:"./emojis/angry.png",1:"./emojis/disgusted.png",2:"./emojis/fearful.png",3:"./emojis/happy.png", 4:"./emojis/neutral.png",5:"./emojis/sad.png",6:"./emojis/surpriced.png"}
+
 
 global last_frame1                                    
 last_frame1 = np.zeros((480, 640, 3), dtype=np.uint8)
 global cap1
 show_text=[0]
 def show_vid():      
-    cap1 = cv2.VideoCapture(0)                                 
+    cap1 = cv2.VideoCapture(0, cv2.CAP_DSHOW)
     if not cap1.isOpened():                             
         print("cant open the camera1")
     flag1, frame1 = cap1.read()
@@ -81,16 +83,19 @@ def show_vid():
 
 
 def show_vid2():
-    frame2=cv2.imread(emoji_dist[show_text[0]])
-    pic2=cv2.cvtColor(frame2,cv2.COLOR_BGR2RGB)
-    img2=Image.fromarray(frame2)
+
+    frame2 = cv2.imread(emoji_dist[show_text[0]])
+    pic2 = cv2.cvtColor(frame2,cv2.COLOR_BGR2RGB)
+    img2 =Image.fromarray(frame2)
     imgtk2=ImageTk.PhotoImage(image=img2)
-    lmain2.imgtk2=imgtk2
+    lmain2.imgtk2 = imgtk2
     lmain3.configure(text=emotion_dict[show_text[0]],font=('arial',45,'bold'))
     
     lmain2.configure(image=imgtk2)
     lmain2.after(10, show_vid2)
 
+
+# 界面板块
 if __name__ == '__main__':
     root=tk.Tk()   
     img = ImageTk.PhotoImage(Image.open("logo.png"))
